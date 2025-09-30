@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.issue.pull_request.head.ref }}
-          token: ${{ secrets.DEVOPS_USER_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,7 +33,7 @@ jobs:
 
       - name: Run semantic-release (dynamic versioning)
         env:
-          GITHUB_TOKEN: ${{ secrets.DEVOPS_USER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx semantic-release --branches=${{ github.event.pull_request.base.ref }}
 
@@ -42,7 +42,7 @@ jobs:
         id: get_release
         run: |
           response=$(curl -s \
-            -H "Authorization: Bearer ${{ secrets.DEVOPS_USER_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/releases/latest)
           latest_tag=$(echo "$response" | jq -r '.tag_name')
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
@@ -81,4 +81,4 @@ jobs:
             Release triggered from PR #${{ github.event.issue.number }} by comment.
           files: ${{ steps.zip.outputs.zip_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.DEVOPS_USER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
