@@ -16,10 +16,11 @@ jobs:
       startsWith(github.event.comment.body, '/release')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR HEAD
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.issue.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
