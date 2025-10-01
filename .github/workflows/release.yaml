@@ -56,6 +56,7 @@ jobs:
       - name: Building with AWS SAM
         id: build_sam
         run: |
+          cd ./sam-app && \
           sam build
 
       - name: Create source zip
